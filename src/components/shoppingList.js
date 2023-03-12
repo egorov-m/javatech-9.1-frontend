@@ -25,8 +25,8 @@ class ShoppingList extends Component {
     /**
      * Вызывается сразу полсе монтирования
      */
-    componentDidMount() {
-        fetch("//127.0.0.1:8080/api/v1/purchase", {
+    async componentDidMount() {
+        await fetch("//127.0.0.1:8080/api/v1/purchase", {
             method: 'GET'
         })
             .then(response => response.json())
@@ -49,64 +49,66 @@ class ShoppingList extends Component {
     render() {
         const {error, isLoaded, itemsList} = this.state;
 
+        const list = <List sx={{width: '100%', bgcolor: '#000'}}>
+            {
+                itemsList.map((item, key) => {
+                    const labelId = `checkbox-list-secondary-label-${item.id}`;
+                    return (
+                        <div>
+                            <ListItem>
+                                <ListItemButton role={undefined} dense>
+                                    <ListItemIcon>
+                                        <ListItemCheckbox
+                                            item={item}
+                                            labelId={labelId}
+                                            checked={this.state.checked}
+                                            setChecked={this.state.setChecked}
+                                        />
+                                    </ListItemIcon>
+                                </ListItemButton>
+
+                                <ListItemText
+                                    id={labelId}
+                                    primary={
+                                        <React.Fragment>
+                                            <Typography
+                                                sx={{display: 'inline'}}
+                                                component="span"
+                                                variant="body2"
+                                                color="#fff"
+                                            >
+                                                {item.title}
+                                            </Typography>
+                                        </React.Fragment>
+                                    }
+                                    secondary={item.description}
+                                />
+                                <ListItemButton role={undefined} dense>
+                                    <ListItemIcon>
+                                        <IconButton
+                                            size="small"
+                                            aria-label="add"
+                                        >
+                                            <ClearOutlinedIcon/>
+                                        </IconButton>
+
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </ListItem>
+                            <Divider variant="inset" component="li"/>
+                        </div>
+                    );
+                })
+            }
+        </List>
+
         if (error) {
             return <p> Error {error.message} </p>
         } else if (!isLoaded) {
             return <p> Loading... </p>
         } else {
             return (
-                <List sx={{width: '100%', bgcolor: '#000'}}>
-                    {
-                        itemsList.map((item, key) => {
-                            const labelId = `checkbox-list-secondary-label-${item.id}`;
-                            return (
-                                <div>
-                                    <ListItem>
-                                        <ListItemButton role={undefined} dense>
-                                            <ListItemIcon>
-                                                <ListItemCheckbox
-                                                    item={item}
-                                                    labelId={labelId}
-                                                    checked={this.state.checked}
-                                                    setChecked={this.state.setChecked}
-                                                />
-                                            </ListItemIcon>
-                                        </ListItemButton>
-
-                                        <ListItemText
-                                            id={labelId}
-                                            primary={
-                                                <React.Fragment>
-                                                    <Typography
-                                                        sx={{display: 'inline'}}
-                                                        component="span"
-                                                        variant="body2"
-                                                        color="#fff"
-                                                    >
-                                                        {item.title}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                            secondary={item.description}
-                                        />
-                                        <ListItemButton role={undefined} dense>
-                                            <ListItemIcon>
-                                                <IconButton
-                                                    size="small"
-                                                    aria-label="add"
-                                                >
-                                                    <ClearOutlinedIcon/>
-                                                </IconButton>
-
-                                            </ListItemIcon>
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <Divider variant="inset" component="li"/>
-                                </div>
-                            );
-                        })
-                    }
-                </List>
+                list
             );
         }
     }

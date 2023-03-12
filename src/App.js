@@ -1,12 +1,11 @@
 import './App.css';
 import Header from './components/header'
 import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import ShoppingList from './components/shoppingList';
 import {Component} from "react";
+import AddForm from "./components/addForm";
 
 const darkTheme = createTheme({
     palette: {
@@ -33,14 +32,12 @@ class App extends Component {
             <div className="App">
                 <ThemeProvider theme={darkTheme}>
                     <Header/>
-                    <Container>
-                        <Button
-                            color="inherit"
-                            variant="contained"
-                            startIcon={<AddCircleIcon/>}
-                        >
-                            Add purchase
-                        </Button>
+                    <Container
+                        sx={{paddingTop: '24px', textAlign: 'left'}}
+                    >
+                        <AddForm
+                            itemsList={this.state.itemsList}
+                        />
                         <ShoppingList />
                     </Container>
                 </ThemeProvider>

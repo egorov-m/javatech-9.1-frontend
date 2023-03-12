@@ -30,44 +30,47 @@ class ListItemCheckbox extends Component {
         }
     }
 
-    fetchStateData = (item, state) => {
+    fetchStateData = async (item, state) => {
         this.setState({
-            isLoaded: false
+            //isLoaded: false
         });
 
         item.state = state;
-        fetch("//127.0.0.1:8080/api/v1/purchase/" + item.id, {
+        return await fetch("//127.0.0.1:8080/api/v1/purchase/" + item.id, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({id: item.id, title: item.title, description: item.description, state: state})
         })
             .then(
                 (response) => {
+
                     this.setState({
                         isLoaded: true,
                     });
                 },
                 (error) => {
                     this.setState({
-                        isLoaded: true,
                         error: true
                     });
                 }
             )
-
-        return this.state.isLoaded && !this.state.error;
     };
 
     handleToggle = (item) => () => {
-        if (item.state === "PURCHASED") {
-            if (this.fetchStateData(item, "SELECTED")) {
-                const currentIndex = this.state.checked.indexOf(item.id);
-                this.state.checked.splice(currentIndex, 1);
-            }
+        if (item.state === "PURCHASED")
+        {
+            this.fetchStateData(item, "SELECTED").then(() => {
+                if (!this.state.error) {
+                    const currentIndex = this.state.checked.indexOf(item.id);
+                    this.state.checked.splice(currentIndex, 1);
+                }
+            });
         } else {
-            if (this.fetchStateData(item, "PURCHASED")) {
-                this.state.checked.push(item.id);
-            }
+            this.fetchStateData(item, "PURCHASED").then(() => {
+                if (!this.state.error) {
+                    this.state.checked.push(item.id);
+                }
+            });
         }
     };
 
@@ -89,7 +92,6 @@ class ListItemCheckbox extends Component {
                 />
             );
         } else {
-
             return (
                 this.checkbox
             );

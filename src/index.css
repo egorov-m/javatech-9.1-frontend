@@ -12,6 +12,11 @@ p {
   color: white;
 }
 
+form {
+  display: flex;
+  vertical-align: center;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
