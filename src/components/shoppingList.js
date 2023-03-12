@@ -6,9 +6,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemButton from "@mui/material/ListItemButton";
-import IconButton from '@mui/material/IconButton';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import ListItemCheckbox from "./listItemCheckbox";
+import DeleteButton from "./deleteButton";
 
 class ShoppingList extends Component {
     constructor(props) {
@@ -85,13 +84,10 @@ class ShoppingList extends Component {
                                 />
                                 <ListItemButton role={undefined} dense>
                                     <ListItemIcon>
-                                        <IconButton
-                                            size="small"
-                                            aria-label="add"
-                                        >
-                                            <ClearOutlinedIcon/>
-                                        </IconButton>
-
+                                        <DeleteButton
+                                            item={item}
+                                            itemsList={itemsList}
+                                        />
                                     </ListItemIcon>
                                 </ListItemButton>
                             </ListItem>
@@ -112,6 +108,6 @@ class ShoppingList extends Component {
             );
         }
     }
-}
+    }
 
-export default ShoppingList;
+    export default ShoppingList;
